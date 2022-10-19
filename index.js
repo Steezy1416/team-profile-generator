@@ -183,8 +183,3 @@ managerQuestions()
         employees.push(manager)
     })
     .then(choices)
-    //i want this to execute when the user picks "Assemble team in the choices function"
-    // Right now if you run node index after the manager questions it show the list options and on the assemble team it says the console.log right next to it
-    .then(() => {
-        console.log("Test to make sure this logs after assembling team")
-    })
