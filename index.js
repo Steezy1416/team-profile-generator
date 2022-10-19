@@ -1,14 +1,17 @@
 const inquirer = require("inquirer")
+const Employee = require("./lib/Employee")
+const Manager = require("./lib/Manager")
+const Engineer = require("./lib/Engineer")
+const Intern = require("./lib/Intern")
 
-const engineers = []
-const interns = []
+const employees = []
 
 const managerQuestions = () => {
     return inquirer
         .prompt([
             {
                 type: "input",
-                name: "managerName",
+                name: "name",
                 message: "What is the team manager's name?",
                 validate: isManagerName => {
                     if (isManagerName) { return true }
@@ -18,7 +21,7 @@ const managerQuestions = () => {
             },
             {
                 type: "input",
-                name: "employeeId",
+                name: "id",
                 message: "What is the team manager's employee id?",
                 validate: isManagerId => {
                     if (isManagerId) { return true }
@@ -27,7 +30,7 @@ const managerQuestions = () => {
             },
             {
                 type: "input",
-                name: "managerEmail",
+                name: "email",
                 message: "What is the team manager's email?",
                 validate: isManagerEmail => {
                     if (isManagerEmail) { return true }
@@ -57,16 +60,14 @@ const choices = () => {
             }
         ])
         .then(choicedata => {
-            if(choicedata.choice === "Engineer"){
+            if (choicedata.choice === "Engineer") {
                 engineerQuestions()
             }
-            else if(choicedata.choice === "Intern")
-            {
+            else if (choicedata.choice === "Intern") {
                 internQuestions()
             }
-            else{
-                console.log(engineers)
-                console.log(interns)
+            else {
+                return
             }
         })
 }
@@ -76,7 +77,7 @@ const engineerQuestions = () => {
         .prompt([
             {
                 type: "input",
-                name: "engineerName",
+                name: "name",
                 message: "What is the engineer's name?",
                 validate: isManagerName => {
                     if (isManagerName) { return true }
@@ -86,7 +87,7 @@ const engineerQuestions = () => {
             },
             {
                 type: "input",
-                name: "engineerId",
+                name: "id",
                 message: "What is the engineer's id?",
                 validate: isManagerId => {
                     if (isManagerId) { return true }
@@ -95,7 +96,7 @@ const engineerQuestions = () => {
             },
             {
                 type: "input",
-                name: "engineerEmail",
+                name: "email",
                 message: "What is the engineer's email?",
                 validate: isManagerEmail => {
                     if (isManagerEmail) { return true }
@@ -113,7 +114,11 @@ const engineerQuestions = () => {
             }
         ])
         .then(engineerData => {
-            engineers.push(engineerData)
+            const { name, id, email, gitHub } = engineerData
+            const engineer = new Engineer(name, id, email, "Engineer", gitHub)
+            engineer.getRole()
+            engineer.getGitHub()
+            employees.push(engineer)
             choices()
         })
 }
@@ -123,7 +128,7 @@ const internQuestions = () => {
         .prompt([
             {
                 type: "input",
-                name: "internName",
+                name: "name",
                 message: "What is the intern's name?",
                 validate: isManagerName => {
                     if (isManagerName) { return true }
@@ -133,7 +138,7 @@ const internQuestions = () => {
             },
             {
                 type: "input",
-                name: "internId",
+                name: "id",
                 message: "What is the intern's id?",
                 validate: isManagerId => {
                     if (isManagerId) { return true }
@@ -142,7 +147,7 @@ const internQuestions = () => {
             },
             {
                 type: "input",
-                name: "internEmail",
+                name: "email",
                 message: "What is the intern's email?",
                 validate: isManagerEmail => {
                     if (isManagerEmail) { return true }
@@ -160,25 +165,23 @@ const internQuestions = () => {
             }
         ])
         .then(internData => {
-            interns.push(internData)
+            const { name, id, email, school } = internData
+            const intern = new Intern(name, id, email, "Intern", school)
+            intern.getRole()
+            intern.getSchool()
+            employees.push(intern)
             choices()
         })
 }
 
 managerQuestions()
     .then(data => {
-        console.log(data)
+        const { name, id, email, officeNum } = data
+        const manager = new Manager(name, id, email, "Manager", officeNum)
+        manager.getRole()
+        employees.push(manager)
     })
     .then(choices)
-    // .then(choicedata => {
-    //     console.log(choicedata)
-    // })
-    // .then(engineerQuestions)
-    // .then(enginedata => {
-    //     console.log(enginedata)
-    // })
-    // .then(internQuestions)
-    // .then(interndata => {
-    //     console.log(interndata)
-    // })
-    
+    .then(() => {
+        console.log(employees)
+    })
