@@ -1,5 +1,4 @@
 const inquirer = require("inquirer")
-const Employee = require("./lib/Employee")
 const Manager = require("./lib/Manager")
 const Engineer = require("./lib/Engineer")
 const Intern = require("./lib/Intern")
@@ -50,7 +49,7 @@ const managerQuestions = () => {
 }
 
 const choices = () => {
-    return inquirer
+     inquirer
         .prompt([
             {
                 type: "list",
@@ -67,6 +66,7 @@ const choices = () => {
                 internQuestions()
             }
             else {
+                console.log(employees)
                 return
             }
         })
@@ -163,6 +163,7 @@ const internQuestions = () => {
                     else { return false }
                 }
             }
+            
         ])
         .then(internData => {
             const { name, id, email, school } = internData
@@ -182,6 +183,8 @@ managerQuestions()
         employees.push(manager)
     })
     .then(choices)
+    //i want this to execute when the user picks "Assemble team in the choices function"
+    // Right now if you run node index after the manager questions it show the list options and on the assemble team it says the console.log right next to it
     .then(() => {
-        console.log(employees)
+        console.log("Test to make sure this logs after assembling team")
     })
