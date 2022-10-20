@@ -2,6 +2,8 @@ const inquirer = require("inquirer")
 const Manager = require("./lib/Manager")
 const Engineer = require("./lib/Engineer")
 const Intern = require("./lib/Intern")
+const employeeTemplate = require("./src/page-template")
+const fs = require("fs")
 
 const employees = []
 
@@ -66,8 +68,9 @@ const choices = () => {
                 internQuestions()
             }
             else {
-                console.log(employees)
-                return
+                const template = employeeTemplate(employees)
+                
+                writeFile(template)
             }
         })
 }
@@ -173,6 +176,17 @@ const internQuestions = () => {
             employees.push(intern)
             choices()
         })
+}
+
+const writeFile = template => {
+
+    fs.copyFile("./src/style.css", "./dist/style.css", err => {
+        if(err) throw err
+    })
+
+    fs.writeFile("./dist/index.html", template, err => {
+        if(err) throw err
+    })
 }
 
 managerQuestions()
