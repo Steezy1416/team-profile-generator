@@ -1,3 +1,4 @@
+//return template segment based on manager data
 const generateManager = (employeeTemplate) => {
     const {name, id, email, role, officeNumber} = employeeTemplate[0]
     return`
@@ -18,6 +19,7 @@ const generateManager = (employeeTemplate) => {
 </section>`
 }
 
+//retur template segment based on employee data and if they are a engineer or intern
 const generateEmployees = (employeeTemplate) => {
     const employeeArr = []
     for(let i = 1; i < employeeTemplate.length; i++){
@@ -62,7 +64,7 @@ const generateEmployees = (employeeTemplate) => {
 }
 
 
-
+//exports the completed template
 module.exports = employeeTemplate => {
     return `<!DOCTYPE html>
     <html lang="en">

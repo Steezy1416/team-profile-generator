@@ -5,8 +5,10 @@ const Intern = require("./lib/Intern")
 const employeeTemplate = require("./src/page-template")
 const fs = require("fs")
 
+//array stores the types of employess and all of their data
 const employees = []
 
+//ask user questions concerning the manager
 const managerQuestions = () => {
     return inquirer
         .prompt([
@@ -50,6 +52,7 @@ const managerQuestions = () => {
         ])
 }
 
+// lets user if they would want to add a manager or intern team member
 const choices = () => {
      inquirer
         .prompt([
@@ -61,6 +64,9 @@ const choices = () => {
             }
         ])
         .then(choicedata => {
+            //if engineer then ask questions concerning the enginner
+            //if intern then ask questions concerning the intern
+            //else retrive the employee data from array and write a new file
             if (choicedata.choice === "Engineer") {
                 engineerQuestions()
             }
@@ -68,13 +74,16 @@ const choices = () => {
                 internQuestions()
             }
             else {
+                // creates the html template with all the employee data
                 const template = employeeTemplate(employees)
                 
+                //write the new file
                 writeFile(template)
             }
         })
 }
 
+//questions concerning the engineer
 const engineerQuestions = () => {
     return inquirer
         .prompt([
@@ -117,15 +126,19 @@ const engineerQuestions = () => {
             }
         ])
         .then(engineerData => {
+            // deconstructs engineer data and makes a new object
             const { name, id, email, gitHub } = engineerData
             const engineer = new Engineer(name, id, email, "Engineer", gitHub)
             engineer.getRole()
             engineer.getGitHub()
+            //once the data is collected then it is pushed into the employee array
             employees.push(engineer)
+            // lets you choose another team meamber again or assemble team
             choices()
         })
 }
 
+//questions concerning the intern with the same data collection method as the engineers
 const internQuestions = () => {
     return inquirer
         .prompt([
@@ -179,17 +192,18 @@ const internQuestions = () => {
 }
 
 const writeFile = template => {
-
+    //copy css file to dist folder
     fs.copyFile("./src/style.css", "./dist/style.css", err => {
         if(err) throw err
     })
-
+    //writes html file into the dist folder
     fs.writeFile("./dist/index.html", template, err => {
         if(err) throw err
     })
     console.log("Your index.html and style.css files have been created and can be found in the 'dist' folder")
 }
 
+//retrieves manager data and gets the data like the intern and engineer
 managerQuestions()
     .then(data => {
         const { name, id, email, officeNum } = data
