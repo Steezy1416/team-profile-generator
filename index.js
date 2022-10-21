@@ -187,6 +187,7 @@ const writeFile = template => {
     fs.writeFile("./dist/index.html", template, err => {
         if(err) throw err
     })
+    console.log("Your index.html and style.css files have been created and can be found in the 'dist' folder")
 }
 
 managerQuestions()
